@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "main.h": "c"
+        "main.h": "c",
+        "monty.h": "c",
+        "string.h": "c"
     }
 }
