@@ -1,49 +1,56 @@
 #include "monty.h"
 
 /**
- * f_div - divides the top two elements of the stack.
+ * f_push - add node to the stack
  * @head: stack head
  * @counter: line_number
  * Return: no return
- */
-void f_div(stack_t **head, unsigned int counter)
+*/
+void f_push(stack_t **head, unsigned int counter)
 {
-    stack_t *h;
-    int len = 0, aux;
+	int n, j = 0, flag = 0;
 
-    h = *head;
+	if (bus.arg)
+	{
+		if (bus.arg[0] == '-')
+			j++;
 
-    /* Calculate the length of the stack */
-    while (h)
-    {
-        h = h->next;
-        len++;
-    }
+		for (; bus.arg[j] != '\0'; j++)
+		{
+			if (bus.arg[j] > 57 || bus.arg[j] < 48)
+				flag = 1;
+		}
 
-    /* Check if there are at least 2 elements in the stack */
-    if (len < 2)
-    {
-        fprintf(stderr, "L%d: can't div, stack too short\n", counter);
-        fclose(bus.file);
-        free(bus.content);
-        free_stack(*head);
-        exit(EXIT_FAILURE);
-    }
+		if (flag == 1)
+		{
+			fprintf(stderr, "L%d: usage: push integer\n", counter);
+			close_resources(head);
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+	{
+		fprintf(stderr, "L%d: usage: push integer\n", counter);
+		close_resources(head);
+		exit(EXIT_FAILURE);
+	}
 
-    /* Check for division by zero */
-    h = *head;
-    if (h->n == 0)
-    {
-        fprintf(stderr, "L%d: division by zero\n", counter);
-        fclose(bus.file);
-        free(bus.content);
-        free_stack(*head);
-        exit(EXIT_FAILURE);
-    }
+	n = atoi(bus.arg);
 
-    /* Perform division operation */
-    aux = h->next->n / h->n;
-    h->next->n = aux;
-    *head = h->next;
-    free(h);
+	if (bus.lifi == 0)
+		addnode(head, n);
+	else
+		addqueue(head, n);
+}
+
+/**
+ * close_resources - close file, free content and head stack
+ * @head: stack head
+ * Return: no return
+*/
+void close_resources(stack_t **head)
+{
+	fclose(bus.file);
+	free(bus.content);
+	free_stack(*head);
 }
