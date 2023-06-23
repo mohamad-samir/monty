@@ -11,6 +11,7 @@ void addnode(stack_t **head, int n)
 {
 	/* Create a new node */
 	stack_t *new_node = malloc(sizeof(stack_t));
+	
 	if (new_node == NULL)
 	{
 		printf("Error: Failed to allocate memory for new node\n");
